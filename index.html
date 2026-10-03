@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>QR Code Security Checker</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">
+<i class="fa-solid fa-shield-halved"></i>
+</div>
+
+<h1>QR Code Security Checker</h1>
+
+<p class="subtitle">
+Scan QR Codes & Detect Suspicious Links
+</p>
+
+<form method="POST" enctype="multipart/form-data">
+
+<label for="file-upload" class="upload-box">
+
+<i class="fa-solid fa-cloud-arrow-up"></i>
+
+<h3>Upload QR Image</h3>
+
+<p>Click here to choose your QR code</p>
+
+<span id="file-name">No file selected</span>
+
+</label>
+
+<input
+type="file"
+id="file-upload"
+name="file"
+accept="image/*"
+required
+onchange="showFileName(this)"
+>
+
+<button type="submit">
+<i class="fa-solid fa-qrcode"></i>
+ Scan QR
+</button>
+
+</form>
+
+{% if qr_data %}
+
+<div class="result">
+
+<h2>Decoded QR</h2>
+
+<p class="url">{{ qr_data }}</p>
+
+{% if "Safe" in result %}
+
+<div class="safe">
+✅ {{ result }}
+</div>
+
+<div class="meter">
+<div class="safe-bar">10%</div>
+</div>
+
+{% else %}
+
+<div class="danger">
+⚠ {{ result }}
+</div>
+
+<div class="meter">
+<div class="danger-bar">85%</div>
+</div>
+
+{% endif %}
+
+{% if reasons %}
+
+<h3>Warnings</h3>
+
+<ul>
+
+{% for reason in reasons %}
+<li>{{ reason }}</li>
+{% endfor %}
+
+</ul>
+
+{% endif %}
+
+</div>
+
+{% endif %}
+
+</div>
+
+<script>
+
+function showFileName(input){
+
+if(input.files.length>0){
+
+document.getElementById("file-name").innerHTML=input.files[0].name;
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
